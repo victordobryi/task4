@@ -1,13 +1,14 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
 import AppRouter from './components/router/AppRouter';
+import Header from './components/Header/Header';
 
 import './styles/main.scss';
 
 export const App = () => (
   <>
     <BrowserRouter>
-      <header className="as">Header</header>
+      <Header isAuth />
       <main>
         <div className="_container">
           <AppRouter isAuth />
