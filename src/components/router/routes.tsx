@@ -10,7 +10,7 @@ interface IRoutes {
   component: React.ReactNode;
 }
 
-enum RoutesName {
+export enum RoutesName {
   LOGIN = '/login',
   USERS = '/users',
   SIGNUP = '/signup',
@@ -27,6 +27,10 @@ export const publicRoutes: IRoutes[] = [
     component: <Signup />
   },
   {
+    path: RoutesName.USERS,
+    component: <Navigate to="/login" />
+  },
+  {
     path: RoutesName.MAIN,
     component: <Main />
   },
@@ -36,18 +40,18 @@ export const publicRoutes: IRoutes[] = [
   },
   {
     path: '*',
-    component: <Navigate to="/main" />
+    component: <Error />
   }
 ];
 
 export const privateRoutes: IRoutes[] = [
   {
     path: RoutesName.LOGIN,
-    component: <Login />
+    component: <Navigate to="/main" />
   },
   {
     path: RoutesName.SIGNUP,
-    component: <Signup />
+    component: <Navigate to="/main" />
   },
   {
     path: RoutesName.USERS,

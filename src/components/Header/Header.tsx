@@ -1,37 +1,42 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+import { userLogout } from '../../store/reducers/auth/ActionCreator';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 
-interface IHeader {
-  isAuth: boolean;
-}
+const Header = () => {
+  const dispatch = useAppDispatch();
+  const { isAuth } = useAppSelector((state) => state.auth);
 
-const Header = ({ isAuth }: IHeader) => {
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand>
-          <Link to="/">VK-app</Link>
+          <LinkContainer to="/">
+            <Nav.Link>VK-app</Nav.Link>
+          </LinkContainer>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           {!isAuth ? (
             <Nav className="ms-auto">
-              <Nav.Link>
-                <Link to="/signup">SignUp</Link>
-              </Nav.Link>
-              <Nav.Link eventKey={2} href="/login">
-                <Link to="/login">LogIn</Link>
-              </Nav.Link>
+              <LinkContainer to="/signup">
+                <Nav.Link>SignUp</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/login">
+                <Nav.Link eventKey={2}>LogIn</Nav.Link>
+              </LinkContainer>
             </Nav>
           ) : (
             <Nav className="ms-auto">
-              <Nav.Link>
-                <Link to="/users">Users</Link>
-              </Nav.Link>
-              <Nav.Link eventKey={2} href="/login">
-                <Link to="/main">LogOut</Link>
-              </Nav.Link>
+              <LinkContainer to="/users">
+                <Nav.Link>Users</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/main">
+                <Nav.Link eventKey={2} onClick={() => dispatch(userLogout())}>
+                  LogOut
+                </Nav.Link>
+              </LinkContainer>
             </Nav>
           )}
         </Navbar.Collapse>

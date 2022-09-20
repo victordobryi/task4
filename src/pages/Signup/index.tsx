@@ -1,10 +1,10 @@
 import React from 'react';
-import Login from '../../components/Login/Login';
+import FormComponent from '../../components/Form/Form';
 
 const Signup = () => {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center">
-      <Login type="signup" />
+      <FormComponent type="signup" />
     </div>
   );
 };
