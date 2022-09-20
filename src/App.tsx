@@ -8,10 +8,10 @@ import './styles/main.scss';
 export const App = () => (
   <>
     <BrowserRouter>
-      <Header isAuth />
+      <Header isAuth={false} />
       <main>
         <div className="_container">
-          <AppRouter isAuth />
+          <AppRouter isAuth={false} />
         </div>
       </main>
       <footer>Directed by Viktar Kasilkin</footer>
