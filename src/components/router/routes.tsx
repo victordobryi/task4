@@ -1,7 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import UsersPage from '../../pages/UsersPage';
-import ErrorPage from '../../pages/NotFound';
-import MainPage from '../../pages/LoginPage';
+import Users from '../../pages/Users';
+import Error from '../../pages/NotFound';
+import Login from '../../pages/Login';
+import Signup from '../../pages/Signup';
+import Main from '../../pages/Main';
 
 interface IRoutes {
   path: string;
@@ -9,14 +11,24 @@ interface IRoutes {
 }
 
 enum RoutesName {
-  LOGIN = '/main',
-  USERS = '/users'
+  LOGIN = '/login',
+  USERS = '/users',
+  SIGNUP = '/signup',
+  MAIN = '/main'
 }
 
 export const publicRoutes: IRoutes[] = [
   {
     path: RoutesName.LOGIN,
-    component: <MainPage />
+    component: <Login />
+  },
+  {
+    path: RoutesName.SIGNUP,
+    component: <Signup />
+  },
+  {
+    path: RoutesName.MAIN,
+    component: <Main />
   },
   {
     path: '/',
@@ -31,11 +43,19 @@ export const publicRoutes: IRoutes[] = [
 export const privateRoutes: IRoutes[] = [
   {
     path: RoutesName.LOGIN,
-    component: <MainPage />
+    component: <Login />
+  },
+  {
+    path: RoutesName.SIGNUP,
+    component: <Signup />
   },
   {
     path: RoutesName.USERS,
-    component: <UsersPage />
+    component: <Users />
+  },
+  {
+    path: RoutesName.MAIN,
+    component: <Main />
   },
   {
     path: '/',
@@ -43,6 +63,6 @@ export const privateRoutes: IRoutes[] = [
   },
   {
     path: '*',
-    component: <ErrorPage />
+    component: <Error />
   }
 ];
