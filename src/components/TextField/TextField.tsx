@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { useField, ErrorMessage } from 'formik';
 import { CgDanger } from 'react-icons/cg';
-import { AiFillCheckCircle } from 'react-icons/ai';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import {
+  AiFillCheckCircle,
+  AiFillEye,
+  AiFillEyeInvisible
+} from 'react-icons/ai';
 import './TextField.scss';
 
 interface ITextField {

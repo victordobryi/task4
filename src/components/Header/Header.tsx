@@ -1,20 +1,12 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { authSlice } from '../../store/reducers/auth';
 import { LinkContainer } from 'react-router-bootstrap';
+import { userLogout } from '../../store/reducers/auth/ActionCreator';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 
-interface IHeader {
-  isAuth: boolean;
-}
-
-const Header = ({ isAuth }: IHeader) => {
-  const dispatch = useDispatch();
-  const { changeIsAuth } = authSlice.actions;
-
-  const handleLogout = () => {
-    dispatch(changeIsAuth(false));
-  };
+const Header = () => {
+  const dispatch = useAppDispatch();
+  const { isAuth } = useAppSelector((state) => state.auth);
 
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
@@ -41,7 +33,7 @@ const Header = ({ isAuth }: IHeader) => {
                 <Nav.Link>Users</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/main">
-                <Nav.Link eventKey={2} onClick={handleLogout}>
+                <Nav.Link eventKey={2} onClick={() => dispatch(userLogout())}>
                   LogOut
                 </Nav.Link>
               </LinkContainer>

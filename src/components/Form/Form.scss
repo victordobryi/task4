@@ -92,7 +92,9 @@
       border-radius: 5px;
     }
   }
-
+  &__error {
+    color: rgb(250, 10, 10);
+  }
   &__form {
     display: flex;
     flex-direction: column;

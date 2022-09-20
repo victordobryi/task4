@@ -5,8 +5,9 @@ import TextField from '../TextField/TextField';
 import { BsGoogle } from 'react-icons/bs';
 import { Link, useNavigate } from 'react-router-dom';
 import './Form.scss';
-import { useAppDispatch } from '../../redux-hooks';
-import { authSlice } from '../../store/reducers/auth';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
+import { userLogin } from '../../store/reducers/auth/ActionCreator';
+import { RoutesName } from '../router/routes';
 
 interface ILogin {
   type: 'login' | 'signup';
@@ -28,7 +29,8 @@ const FormComponent = ({ type }: ILogin) => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { changeIsAuth } = authSlice.actions;
+  const { error } = useAppSelector((state) => state.auth);
+
   return (
     <Formik
       initialValues={{
@@ -38,13 +40,14 @@ const FormComponent = ({ type }: ILogin) => {
       }}
       validationSchema={validate}
       onSubmit={(values) => {
-        dispatch(changeIsAuth(true));
-        navigate('/users');
+        dispatch(userLogin(values.email, values.password));
+        navigate(RoutesName.USERS);
       }}
     >
       {(formik) => {
         return (
           <div className="login">
+            <div className="login__error">{error}</div>
             <div className="login__content">
               <h2>{type === 'login' ? 'Login' : 'Signup'}</h2>
               <Form className="login__form">
