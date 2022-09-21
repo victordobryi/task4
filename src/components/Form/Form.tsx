@@ -2,12 +2,10 @@ import React from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '../TextField/TextField';
-import { BsGoogle } from 'react-icons/bs';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Form.scss';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { userLogin } from '../../store/reducers/auth/ActionCreator';
-import { RoutesName } from '../router/routes';
 
 interface ILogin {
   type: 'login' | 'signup';
@@ -27,7 +25,6 @@ const FormComponent = ({ type }: ILogin) => {
         : Yup.string()
   });
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.auth);
 
@@ -41,7 +38,6 @@ const FormComponent = ({ type }: ILogin) => {
       validationSchema={validate}
       onSubmit={(values) => {
         dispatch(userLogin(values.email, values.password));
-        navigate(RoutesName.USERS);
       }}
     >
       {(formik) => {
@@ -80,22 +76,8 @@ const FormComponent = ({ type }: ILogin) => {
                     Reset
                   </button>
                 </div>
-                <div className="separator">
-                  <hr />
-                  <span>OR</span>
-                  <hr />
-                </div>
-                <button className="login__google">
-                  <BsGoogle />
-                  {type === 'login'
-                    ? 'Login with Google'
-                    : 'Signup with Google'}
-                </button>
                 {type === 'login' ? (
                   <>
-                    <span className="login__subtitle">
-                      Forgot your password?
-                    </span>
                     <hr />
                     <div className="login__register">
                       <span className="login__subtitle">

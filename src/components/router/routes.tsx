@@ -47,11 +47,11 @@ export const publicRoutes: IRoutes[] = [
 export const privateRoutes: IRoutes[] = [
   {
     path: RoutesName.LOGIN,
-    component: <Navigate to="/main" />
+    component: <Navigate to={RoutesName.USERS} />
   },
   {
     path: RoutesName.SIGNUP,
-    component: <Navigate to="/main" />
+    component: <Navigate to={RoutesName.USERS} />
   },
   {
     path: RoutesName.USERS,
