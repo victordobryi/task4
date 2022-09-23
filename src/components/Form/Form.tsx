@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '../TextField/TextField';
 import { Link } from 'react-router-dom';
 import './Form.scss';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
-import { userLogin } from '../../store/reducers/auth/ActionCreator';
+import { isUser, userLogin } from '../../store/reducers/auth/ActionCreator';
+import UserService from '../../API/UserService';
 
 interface ILogin {
   type: 'login' | 'signup';
@@ -28,6 +29,10 @@ const FormComponent = ({ type }: ILogin) => {
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.auth);
 
+  useEffect(() => {
+    dispatch(isUser());
+  });
+
   return (
     <Formik
       initialValues={{
@@ -37,7 +42,18 @@ const FormComponent = ({ type }: ILogin) => {
       }}
       validationSchema={validate}
       onSubmit={(values) => {
-        dispatch(userLogin(values.email, values.password));
+        const user = {
+          username: values.email,
+          password: values.password
+        };
+        try {
+          type === 'signup'
+            ? (UserService.addUser(user),
+              dispatch(userLogin(values.email, values.password)))
+            : dispatch(userLogin(values.email, values.password));
+        } catch (error) {
+          throw new Error('Err');
+        }
       }}
     >
       {(formik) => {

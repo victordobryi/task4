@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
+import UserService from '../../API/UserService';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
-import { getUsers } from '../../store/reducers/auth/ActionCreator';
+import { authSlice } from '../../store/reducers/auth';
+import { isUser } from '../../store/reducers/auth/ActionCreator';
 import Toolbar from '../Toolbar/Toolbar';
 
 const Users = () => {
@@ -10,6 +12,26 @@ const Users = () => {
   const [all, setAll] = useState(false);
   const [checkboxes, setCheckboxes] = useState<string[]>([]);
   const dispatch = useAppDispatch();
+  const { setUsers } = authSlice.actions;
+
+  useEffect(() => {
+    setCheckboxes([]);
+    setAll(false);
+  }, [users]);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const response = await UserService.getUsers();
+        dispatch(setUsers(response.data));
+      } catch (error) {
+        throw new Error('Err');
+      }
+    };
+    fetchAllUsers();
+
+    dispatch(isUser());
+  }, []);
 
   useEffect(() => {
     all
@@ -18,15 +40,6 @@ const Users = () => {
         )
       : setCheckboxes([]);
   }, [all]);
-
-  useEffect(() => {
-    setCheckboxes([]);
-    setAll(false);
-  }, [users]);
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, []);
 
   const changeCheckboxes = (id: string) => {
     setCheckboxes(
