@@ -67,7 +67,9 @@ const FormComponent = ({ type }: ILogin) => {
       {(formik) => {
         return (
           <div className="login">
-            <div className="login__error">{error}</div>
+            <div className="login__error">
+              {type === 'login' ? error : null}
+            </div>
             <div className="login__content">
               <h2>{type === 'login' ? 'Login' : 'Signup'}</h2>
               <Form className="login__form">
