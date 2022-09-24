@@ -2,9 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IUser {
   username: string;
+  email: string;
   password: string;
-  isBlock: boolean;
+  isBlock?: number;
+  createDate: string;
+  lastLogin: string;
   id: number;
+}
+
+export interface IUserNoId {
+  username: string;
+  password: string;
+  createDate: string;
+  email: string;
 }
 
 interface Auth {
@@ -48,12 +58,12 @@ export const authSlice = createSlice({
     },
     blockUsers(state, action: PayloadAction<number>) {
       state.users.map((user) =>
-        user.id === action.payload ? (user.isBlock = true) : null
+        user.id === action.payload ? (user.isBlock = 1) : null
       );
     },
     unblockUsers(state, action: PayloadAction<number>) {
       state.users.map((user) =>
-        user.id === action.payload ? (user.isBlock = false) : null
+        user.id === action.payload ? (user.isBlock = 0) : null
       );
     },
     setError(state, action: PayloadAction<string>) {

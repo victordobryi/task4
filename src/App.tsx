@@ -5,6 +5,7 @@ import Header from './components/Header/Header';
 import './styles/main.scss';
 import { useAppDispatch, useAppSelector } from './redux-hooks';
 import { authSlice, IUser } from './store/reducers/auth';
+import { isUser } from './store/reducers/auth/ActionCreator';
 
 export const App = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
@@ -14,10 +15,11 @@ export const App = () => {
   useEffect(() => {
     if (localStorage.getItem('auth')) {
       dispatch(
-        setUser({ username: localStorage.getItem('username' || '') } as IUser)
+        setUser({ username: localStorage.getItem('id' || '') } as IUser)
       );
       dispatch(setAuth(true));
     }
+    dispatch(isUser());
   }, []);
 
   return (

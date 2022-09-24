@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
+import UserService from '../../API/UserService';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
-import { getUsers } from '../../store/reducers/auth/ActionCreator';
+import { authSlice } from '../../store/reducers/auth';
+import { isUser } from '../../store/reducers/auth/ActionCreator';
 import Toolbar from '../Toolbar/Toolbar';
 
 const Users = () => {
@@ -10,6 +12,26 @@ const Users = () => {
   const [all, setAll] = useState(false);
   const [checkboxes, setCheckboxes] = useState<string[]>([]);
   const dispatch = useAppDispatch();
+  const { setUsers } = authSlice.actions;
+
+  useEffect(() => {
+    setCheckboxes([]);
+    setAll(false);
+  }, [users]);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const response = await UserService.getUsers();
+        dispatch(setUsers(response.data));
+      } catch (error) {
+        throw new Error('Err');
+      }
+    };
+    fetchAllUsers();
+
+    dispatch(isUser());
+  }, []);
 
   useEffect(() => {
     all
@@ -20,13 +42,8 @@ const Users = () => {
   }, [all]);
 
   useEffect(() => {
-    setCheckboxes([]);
-    setAll(false);
-  }, [users]);
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, []);
+    dispatch(isUser());
+  }, [checkboxes]);
 
   const changeCheckboxes = (id: string) => {
     setCheckboxes(
@@ -58,25 +75,35 @@ const Users = () => {
               />
             </th>
             <th>#</th>
-            <th>User email</th>
+            <th>name</th>
+            <th>email</th>
+            <th>created date</th>
+            <th>last login</th>
+            <th>status</th>
           </tr>
         </thead>
-        {users?.map(({ username }, id) => (
-          <tbody key={id}>
-            <tr>
-              <td>
-                <Form.Check
-                  type="checkbox"
-                  id={`${id}`}
-                  checked={checkboxes.includes(`${id}`)}
-                  onChange={(event) => changeCheckboxes(event.target.id)}
-                />
-              </td>
-              <td>{id + 1}</td>
-              <td>{username}</td>
-            </tr>
-          </tbody>
-        ))}
+        {users?.map(
+          ({ username, createDate, email, lastLogin, isBlock }, id) => (
+            <tbody key={id}>
+              <tr>
+                <td>
+                  <Form.Check
+                    type="checkbox"
+                    id={`${id}`}
+                    checked={checkboxes.includes(`${id}`)}
+                    onChange={(event) => changeCheckboxes(event.target.id)}
+                  />
+                </td>
+                <td>{id + 1}</td>
+                <td>{username}</td>
+                <td>{email}</td>
+                <td>{createDate}</td>
+                <td>{lastLogin}</td>
+                <td>{isBlock ? 'blocked' : 'not blocked'}</td>
+              </tr>
+            </tbody>
+          )
+        )}
       </Table>
     </div>
   );

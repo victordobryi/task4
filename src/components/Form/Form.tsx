@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '../TextField/TextField';
 import { Link } from 'react-router-dom';
 import './Form.scss';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
-import { userLogin } from '../../store/reducers/auth/ActionCreator';
+import { isUser, userLogin } from '../../store/reducers/auth/ActionCreator';
+import UserService from '../../API/UserService';
+import { getCurrentDate } from '../../utils/getCurrentTime';
 
 interface ILogin {
   type: 'login' | 'signup';
@@ -28,16 +30,38 @@ const FormComponent = ({ type }: ILogin) => {
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.auth);
 
+  useEffect(() => {
+    dispatch(isUser());
+  });
+
   return (
     <Formik
       initialValues={{
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        username: ''
       }}
       validationSchema={validate}
       onSubmit={(values) => {
-        dispatch(userLogin(values.email, values.password));
+        const user = {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          createDate: getCurrentDate(),
+          lastLogin: getCurrentDate()
+        };
+        try {
+          type === 'signup'
+            ? UserService.addUser(user)
+                .then((data) => {
+                  dispatch(userLogin(values.email, values.password));
+                })
+                .catch((err) => console.log('Ошибка тут'))
+            : dispatch(userLogin(values.email, values.password));
+        } catch (error) {
+          throw new Error('Err');
+        }
       }}
     >
       {(formik) => {
@@ -53,6 +77,14 @@ const FormComponent = ({ type }: ILogin) => {
                   type="email"
                   placeholder="Email"
                 />
+                {type !== 'login' ? (
+                  <TextField
+                    label=""
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                  />
+                ) : null}
                 <TextField
                   label=""
                   name="password"
