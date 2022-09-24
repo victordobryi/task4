@@ -41,6 +41,10 @@ const Users = () => {
       : setCheckboxes([]);
   }, [all]);
 
+  useEffect(() => {
+    dispatch(isUser());
+  }, [checkboxes]);
+
   const changeCheckboxes = (id: string) => {
     setCheckboxes(
       checkboxes.includes(id)
@@ -71,25 +75,35 @@ const Users = () => {
               />
             </th>
             <th>#</th>
-            <th>User email</th>
+            <th>name</th>
+            <th>email</th>
+            <th>created date</th>
+            <th>last login</th>
+            <th>status</th>
           </tr>
         </thead>
-        {users?.map(({ username }, id) => (
-          <tbody key={id}>
-            <tr>
-              <td>
-                <Form.Check
-                  type="checkbox"
-                  id={`${id}`}
-                  checked={checkboxes.includes(`${id}`)}
-                  onChange={(event) => changeCheckboxes(event.target.id)}
-                />
-              </td>
-              <td>{id + 1}</td>
-              <td>{username}</td>
-            </tr>
-          </tbody>
-        ))}
+        {users?.map(
+          ({ username, createDate, email, lastLogin, isBlock }, id) => (
+            <tbody key={id}>
+              <tr>
+                <td>
+                  <Form.Check
+                    type="checkbox"
+                    id={`${id}`}
+                    checked={checkboxes.includes(`${id}`)}
+                    onChange={(event) => changeCheckboxes(event.target.id)}
+                  />
+                </td>
+                <td>{id + 1}</td>
+                <td>{username}</td>
+                <td>{email}</td>
+                <td>{createDate}</td>
+                <td>{lastLogin}</td>
+                <td>{isBlock ? 'blocked' : 'not blocked'}</td>
+              </tr>
+            </tbody>
+          )
+        )}
       </Table>
     </div>
   );

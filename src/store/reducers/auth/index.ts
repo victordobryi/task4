@@ -2,14 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IUser {
   username: string;
+  email: string;
   password: string;
   isBlock?: number;
+  createDate: string;
+  lastLogin: string;
   id: number;
 }
 
 export interface IUserNoId {
   username: string;
   password: string;
+  createDate: string;
+  email: string;
 }
 
 interface Auth {

@@ -3,21 +3,21 @@ import { IUser, IUserNoId } from '../store/reducers/auth';
 
 export default class UserService {
   static async getUsers(): Promise<AxiosResponse<IUser[]>> {
-    return axios.get<IUser[]>('http://localhost:5000/users');
+    return axios.get<IUser[]>('https://server-task4.herokuapp.com/users');
   }
   static async getUser(id: string): Promise<AxiosResponse<IUser>> {
-    return axios.get<IUser>(`http://localhost:5000/users/${id}`);
+    return axios.get<IUser>(`https://server-task4.herokuapp.com/users/${id}`);
   }
   static async updateUser(
     newUser: IUser,
     id: number
   ): Promise<AxiosResponse<IUser>> {
-    return axios.put(`http://localhost:5000/users/${id}`, newUser);
+    return axios.put(`https://server-task4.herokuapp.com/users/${id}`, newUser);
   }
   static async deleteUser(id: number): Promise<AxiosResponse<IUser>> {
-    return axios.delete(`http://localhost:5000/users/${id}`);
+    return axios.delete(`https://server-task4.herokuapp.com/users/${id}`);
   }
   static async addUser(newUser: IUserNoId): Promise<AxiosResponse<IUser>> {
-    return axios.post('http://localhost:5000/users/', newUser);
+    return axios.post('https://server-task4.herokuapp.com/users', newUser);
   }
 }

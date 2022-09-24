@@ -32,27 +32,47 @@ const Toolbar = ({ checkboxes }: IToolbar) => {
     }
   };
 
-  const handleBlockUsers = () => {
+  const handleBlockUsers = async () => {
     try {
-      dispatch(isUser());
-      changedUsers.forEach(({ id, password, username }) => {
-        const newUser = { id, password, username, isBlock: 1 };
-        UserService.updateUser(newUser, id);
-        dispatch(blockUsers(id));
-      });
+      await dispatch(isUser());
+      changedUsers.forEach(
+        ({ id, password, username, createDate, email, lastLogin }) => {
+          const newUser = {
+            id,
+            password,
+            username,
+            createDate,
+            email,
+            lastLogin,
+            isBlock: 1
+          };
+          UserService.updateUser(newUser, id);
+          dispatch(blockUsers(id));
+        }
+      );
     } catch (error) {
       throw new Error('Error');
     }
   };
 
-  const handleUnBlockUsers = () => {
+  const handleUnBlockUsers = async () => {
     try {
-      dispatch(isUser());
-      changedUsers.forEach(({ id, password, username }) => {
-        const newUser = { id, password, username, isBlock: 0 };
-        UserService.updateUser(newUser, id);
-        dispatch(unblockUsers(id));
-      });
+      await dispatch(isUser());
+      changedUsers.forEach(
+        ({ id, password, username, createDate, email, lastLogin }) => {
+          const newUser = {
+            id,
+            password,
+            username,
+            createDate,
+            email,
+            lastLogin,
+            isBlock: 0
+          };
+          UserService.updateUser(newUser, id);
+          dispatch(unblockUsers(id));
+        }
+      );
     } catch (error) {
       throw new Error('Error');
     }

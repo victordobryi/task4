@@ -1,5 +1,6 @@
 import { authSlice, IUser } from '.';
 import UserService from '../../../API/UserService';
+import { getCurrentDate } from '../../../utils/getCurrentTime';
 import { AppDispatch } from '../../store';
 
 export const getUsers = () => async (dispatch: AppDispatch) => {
@@ -37,17 +38,19 @@ export const isUser = () => async (dispatch: AppDispatch) => {
 };
 
 export const userLogin =
-  (username: string, password: string) => async (dispatch: AppDispatch) => {
+  (email: string, password: string) => async (dispatch: AppDispatch) => {
     try {
       dispatch(authSlice.actions.setLoading(true));
       const response = await UserService.getUsers();
       const mockUser = response.data.find(
-        (user) => user.username === username && user.password === password
+        (user) => user.email === email && user.password === password
       );
       if (mockUser && !mockUser.isBlock) {
+        const newUser = { ...mockUser, lastLogin: getCurrentDate() };
+        await UserService.updateUser(newUser, newUser.id);
         localStorage.setItem('auth', 'true');
         localStorage.setItem('id', String(mockUser.id));
-        dispatch(authSlice.actions.setUser(mockUser));
+        dispatch(authSlice.actions.setUser(newUser));
         dispatch(authSlice.actions.setUsers(response.data));
         dispatch(authSlice.actions.setAuth(true));
       } else if (mockUser?.isBlock) {
